@@ -1,5 +1,7 @@
 import bs4
 import requests
+from PIL import Image
+from io import BytesIO
 
 base_url = 'http://pixeljoint.com'
 generated_urls = [f"{base_url}/pixelart/{pnum}.htm" for pnum in range(1000, 1005)]
@@ -9,6 +11,8 @@ for url in generated_urls:
     soup = bs4.BeautifulSoup(response.text, "html.parser")
     image = soup.find(id="mainimg")
     if image:
+        response = requests.get((base_url+image['src']))
+        Image.open(BytesIO(response.content))
         print('title '+image['alt'])
         print('width '+image['width'])
         print('height '+image['height'])
